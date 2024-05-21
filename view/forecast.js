@@ -11,9 +11,16 @@ class ForecastView {
     if (data.clouds >= 25 && data.clouds <= 75) icons.push('cloud')
     if (data.rain) icons.push('rain')
     if (data.wind_speed > 8) icons.push('wind')
-    if (icons.length > 1 && icons[0] === 'cloud') icons[0] = 'cloud_with' 
+    if (icons.length > 1 && icons[0] === 'cloud') icons[0] = 'cloud_with'
 
     return icons
+  }
+
+  getIcon (icons) {
+    let ret = `<svg ${icons.length > 1 ? 'class="icon_with"' : ''}><use xlink:href="#${icons[0]}" /></svg>`
+    if (icons.length > 1) ret += `<svg class="icon_dop"><use xlink:href="#${icons[1]}" /></svg>`
+    if (icons.length > 2) ret += `<svg class="icon_dop dop_second dop_duo"><use xlink:href="#${icons[2]}" /></svg>`
+    return ret
   }
 
   async display() {
@@ -27,10 +34,21 @@ class ForecastView {
     document.querySelector('.temperature .min').innerHTML = `${data.now.min}°`
     document.querySelector('.city_time').innerHTML = data.now.time
     const icons = this.getIconByData(data.now)
-    const iconDiv = document.querySelector('.icon_weather')
-    iconDiv.innerHTML = `<svg class="icon_with"><use xlink:href="#${icons[0]}" /></svg>`
-    if (icons.length > 1) iconDiv.innerHTML += `<svg class="icon_dop"><use xlink:href="#${icons[1]}" /></svg>`
-    if (icons.length > 2) iconDiv.innerHTML += `<svg class="icon_dop dop_second dop_duo"><use xlink:href="#${icons[2]}" /></svg>`
+    document.querySelector('.icon_weather').innerHTML = this.getIcon(icons)
+
+    const hourlyDiv = document.querySelector('.scroll_line')
+    hourlyDiv.innerHTML = ''
+
+    for (let i = 0; i < data.hourly.length; ++i) {
+      hourlyDiv.innerHTML +=
+        `<div class="item_scroll_line flex_col centered">
+          <div class="text_accent">${data.hourly[i].hour}</div>
+          <div class="icon icon_weather icon_normal">
+            ${this.getIcon(this.getIconByData(data.hourly[i]))}
+          </div>
+          <div class="text_h3">${data.hourly[i].temp}°</div>
+        </div>`
+    }
   }
 
   destroy() {

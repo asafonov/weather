@@ -32,6 +32,7 @@ class Forecast {
     let data = asafonov.cache.get(this.place)
 
     if (! data) {
+      data = {hourly: []}
       const url = `${asafonov.settings.apiUrl}/?place=${this.place}`
       try {
         const apiResp = await (await fetch(url)).json()
@@ -47,12 +48,14 @@ class Forecast {
             maxToday = Math.max(apiResp[i].temp, maxToday)
             minToday = Math.min(apiResp[i].temp, minToday)
           }
+
+          if (i <= 16) {
+            data.hourly.push(this.formatData(apiResp[i]))
+          }
         }
 
-        data = {
-          now: {
-            ...this.formatData(apiResp[0]), ...{max: maxToday, min: minToday}
-          }
+        data.now = {
+          ...this.formatData(apiResp[0]), ...{max: maxToday, min: minToday}
         }
 
         console.log(data)

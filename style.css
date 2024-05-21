@@ -161,6 +161,8 @@ body {
 }
 
 .scroll_line {
+  width: 100%;
+  overflow-x: auto;
   gap: var(--size16);
   margin-bottom: var(--size16);
 }
