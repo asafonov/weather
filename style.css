@@ -151,7 +151,7 @@ body {
 }
 
 .item_line .stats .text_small::after {
-  content: 'mph';
+  content: 'm/s';
   font-size: var(--size_font6);
   padding-left: var(--size_border2);
 }
@@ -208,7 +208,7 @@ body {
 }
 
 .item_days_list .wind .power::after {
-  content: 'mph';
+  content: 'm/s';
   display: block;
   font-size: var(--size_font8);
   color: var(--color_accent);
