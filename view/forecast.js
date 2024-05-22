@@ -6,10 +6,11 @@ class ForecastView {
 
   getIconByData (data) {
     const icons = []
-    icons.push(data.clouds > 75 ? 'cloud' : data.hour >= '20' || data.hour <= '08' ? 'moon' : 'sun')
+    icons.push(data.clouds > 75 || data.rain || data.snow ? 'cloud' : data.hour >= '20' || data.hour < '08' ? 'moon' : 'sun')
 
-    if (data.clouds >= 25 && data.clouds <= 75) icons.push('cloud')
+    if (! data.rain && ! data.snow && data.clouds >= 25 && data.clouds <= 75) icons.push('cloud')
     if (data.rain) icons.push('rain')
+    if (data.rain > 2.5) icons.push('rain')
     if (data.wind_speed > 8) icons.push('wind')
     if (icons.length > 1 && icons[0] === 'cloud') icons[0] = 'cloud_with'
 
@@ -34,7 +35,9 @@ class ForecastView {
     document.querySelector('.temperature .min').innerHTML = `${data.now.min}°`
     document.querySelector('.city_time').innerHTML = data.now.time
     const icons = this.getIconByData(data.now)
-    document.querySelector('.icon_weather').innerHTML = this.getIcon(icons)
+    const iconDiv = document.querySelector('.icon_weather')
+    iconDiv.innerHTML = this.getIcon(icons)
+    iconDiv.classList[data.now.rain ? 'remove' : 'add']('icon_dop_top')
 
     const hourlyDiv = document.querySelector('.scroll_line')
     hourlyDiv.innerHTML = ''
@@ -43,7 +46,7 @@ class ForecastView {
       hourlyDiv.innerHTML +=
         `<div class="item_scroll_line flex_col centered">
           <div class="text_accent">${data.hourly[i].hour}</div>
-          <div class="icon icon_weather icon_normal">
+          <div class="icon icon_weather icon_normal${data.hourly[i].rain ? '' : ' icon_dop_top'}">
             ${this.getIcon(this.getIconByData(data.hourly[i]))}
           </div>
           <div class="text_h3">${data.hourly[i].temp}°</div>
