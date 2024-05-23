@@ -23,7 +23,7 @@
   --size4: calc(var(--size16)/4);
   --size6: calc(var(--size16)/2.6);
   --size12: calc(var(--size16)/1.3);
-  --size16: max(2vw, 2vh);
+  --size16: max(2.5vw, 2.5vh);
   --size20: calc(1.25*var(--size16));
   --size24: calc(1.5*var(--size16));
   --size28: calc(1.75*var(--size16));
