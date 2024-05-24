@@ -163,6 +163,7 @@ body {
 .scroll_line {
   gap: var(--size16);
   margin-bottom: var(--size16);
+  overflow-y: auto;
 }
 
 .scroll_line .item_scroll_line .icon_weather {
