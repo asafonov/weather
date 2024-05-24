@@ -155,8 +155,9 @@ body {
   padding-left: var(--size_border2);
 }
 
-.item_line .wind .direction {
+.item_days_list .wind .direction {
   gap: var(--size_border2);
+  min-width: var(--size12);
 }
 
 .scroll_line {
