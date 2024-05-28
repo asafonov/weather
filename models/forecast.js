@@ -28,6 +28,10 @@ class Forecast {
     }
   }
 
+  getCachedData() {
+    return asafonov.cache.getItem(this.place)
+  }
+
   async getData() {
     let data = asafonov.cache.get(this.place)
 
@@ -89,7 +93,7 @@ class Forecast {
           ...this.formatData(apiResp[0]), ...{max: maxToday, min: minToday}
         }
 
-        console.log(data)
+        asafonov.cache.set(this.getPlace(), data)
       } catch (e) {
         console.error(e)
         return

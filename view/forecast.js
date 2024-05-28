@@ -31,8 +31,12 @@ class ForecastView {
 
   async display() {
     document.querySelector('.city_name').innerHTML = this.model.getPlace()
+    this.displayData(this.model.getCachedData())
     const data = await this.model.getData()
+    this.displayData(data)
+  }
 
+  displayData (data) {
     if (! data) return
 
     document.querySelector('.temperature .now').innerHTML = `${data.now.temp}°`
