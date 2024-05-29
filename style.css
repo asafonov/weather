@@ -236,7 +236,6 @@ svg * {
   fill: transparent;
 }
 
-
 .icon_big {
   width: var(--size48);
   height: var(--size48);
@@ -363,14 +362,6 @@ svg * {
   opacity: 0.5;
 }
 
-.navigation .icon_list {
-
-}
-
-.navigation .icon_add {
-
-}
-
 #add_view .navigation .icon_add {
   transform-box: fill-box;
   transform-origin: center;
@@ -390,7 +381,6 @@ svg * {
 }
 
 .navigation .search_field {
-
   height: 100%;
   padding: 0 var(--size24) 0 var(--size12);
 
