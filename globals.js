@@ -5,7 +5,7 @@ window.asafonov.cache = new Cache(600)
 window.asafonov.events = {
 }
 window.asafonov.settings = {
-  apiUrl: 'http://isengard.asafonov.org:8000/weather/'
+  apiUrl: 'http://isengard.asafonov.org/weather/'
 }
 window.onerror = (msg, url, line) => {
   if (!! window.asafonov.debug) alert(`${msg} on line ${line}`)
