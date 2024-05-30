@@ -90,7 +90,7 @@ class Forecast {
         }
 
         data.now = {
-          ...this.formatData(apiResp[0]), ...{max: maxToday, min: minToday}
+          ...this.formatData(apiResp[0]), ...{max: maxToday, min: minToday, timezone: apiResp[0].timezone}
         }
 
         asafonov.cache.set(this.getPlace(), data)

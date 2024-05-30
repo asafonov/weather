@@ -14,7 +14,7 @@ class Cache {
     const data = JSON.parse(localStorage.getItem(this.prefix + name))
 
     if (data && data.ts) {
-      if (data.ts + this.ttl < new Date().getTime())
+      if (data.ts + this.ttl > new Date().getTime())
         return data.value
     }
 

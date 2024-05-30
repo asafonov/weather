@@ -1,7 +1,7 @@
 window.asafonov = {}
 window.asafonov.version = '0.1'
 window.asafonov.messageBus = new MessageBus()
-window.asafonov.cache = new Cache(600)
+window.asafonov.cache = new Cache(600000)
 window.asafonov.events = {
 }
 window.asafonov.settings = {

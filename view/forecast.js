@@ -36,13 +36,17 @@ class ForecastView {
     this.displayData(data)
   }
 
+  getCurrentTime (timezone) {
+    return new Date(new Date().getTime() + (timezone || 0) * 1000).toISOString().substr(11, 5)
+  }
+
   displayData (data) {
     if (! data) return
 
     document.querySelector('.temperature .now').innerHTML = `${data.now.temp}°`
     document.querySelector('.temperature .max').innerHTML = `${data.now.max}°`
     document.querySelector('.temperature .min').innerHTML = `${data.now.min}°`
-    document.querySelector('.city_time').innerHTML = data.now.time
+    document.querySelector('.city_time').innerHTML = this.getCurrentTime(data.now.timezone)
     const icons = this.getIconByData(data.now)
     const iconDiv = document.querySelector('.icon_weather')
     iconDiv.innerHTML = this.getIcon(icons)
