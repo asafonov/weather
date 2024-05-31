@@ -1,11 +1,7 @@
 class Forecast {
 
   constructor (place) {
-    if (place) {
-      this.place = place.charAt(0).toUpperCase() + place.slice(1).toLowerCase()
-    } else {
-      this.place = 'Belgrade'
-    }
+    this.place = place.charAt(0).toUpperCase() + place.slice(1).toLowerCase()
   }
 
   getPlace() {

@@ -1,4 +1,3 @@
 document.addEventListener("DOMContentLoaded", function (event) {
-  const forecast = new ForecastView()
-  forecast.display()
+  const view = new ControlView()
 })
