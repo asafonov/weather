@@ -1,7 +1,8 @@
 class Forecast {
 
   constructor (place) {
-    this.place = place.charAt(0).toUpperCase() + place.slice(1).toLowerCase()
+    const capitalize = v => v.charAt(0).toUpperCase() + v.slice(1).toLowerCase()
+    this.place = place.split(' ').map(i => capitalize(i)).join(' ')
   }
 
   getPlace() {
