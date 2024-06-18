@@ -21,7 +21,8 @@ class Forecast {
       humidity: item.humidity,
       clouds: item.clouds,
       rain: item.rain,
-      snow: item.snow
+      snow: item.snow,
+      description: item.description
     }
   }
 
