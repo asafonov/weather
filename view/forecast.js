@@ -46,6 +46,8 @@ class ForecastView {
     document.querySelector('.temperature .now').innerHTML = `${data.now.temp}°`
     document.querySelector('.temperature .max').innerHTML = `${data.now.max}°`
     document.querySelector('.temperature .min').innerHTML = `${data.now.min}°`
+    document.querySelector('.wind .js-main').innerHTML = data.now.wind_speed
+    document.querySelector('.wind .js-direction').innerHTML = data.now.wind_direction
     document.querySelector('.city_time').innerHTML = this.getCurrentTime(data.now.timezone)
     const icons = this.getIconByData(data.now)
     const iconDiv = document.querySelector('.icon_weather')
