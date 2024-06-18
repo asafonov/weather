@@ -178,8 +178,8 @@ body {
   margin-top: var(--size24);
 }
 
-.item_main .icon_weather {
-  margin-top: var(--size16);
+.item_main .city_stats {
+  justify-content: space-between;
 }
 
 .item_main .wind {
