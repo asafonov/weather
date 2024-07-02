@@ -3,8 +3,10 @@ class NavigationView {
   constructor() {
     const navigationContainer = document.querySelector('.navigation')
     this.addButton = navigationContainer.querySelector('.icon_add')
+    this.listButton = navigationContainer.querySelector('.icon_list')
     this.pagesButtons = navigationContainer.querySelector('.pages')
     this.onAddClickProxy = this.onAddClick.bind(this)
+    this.onListClickProxy = this.onListClick.bind(this)
     this.addEventListeners()
     this.updatePagesButtons()
   }
@@ -66,12 +68,17 @@ class NavigationView {
     }
   }
 
+  onListClick() {
+  }
+
   addEventListeners() {
     this.addButton.addEventListener('click', this.onAddClickProxy)
+    this.listButton.addEventListener('click', this.onListClickProxy)
   }
 
   removeEventListeners() {
     this.addButton.removeEventListener('click', this.onAddClickProxy)
+    this.listButton.removeEventListener('click', this.onListClickProxy)
   }
 
   destroy() {
