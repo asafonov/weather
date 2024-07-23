@@ -1,6 +1,7 @@
 class ForecastView {
 
-  constructor (place) {
+  constructor (place, container) {
+    this.container = container
     this.model = new Forecast(place)
   }
 
@@ -30,7 +31,7 @@ class ForecastView {
   }
 
   async display() {
-    document.querySelector('.city_name').innerHTML = this.model.getPlace()
+    this.container.querySelector('.city_name').innerHTML = this.model.getPlace()
     this.displayData(this.model.getCachedData())
     const data = await this.model.getData()
     this.displayData(data)
@@ -43,19 +44,19 @@ class ForecastView {
   displayData (data) {
     if (! data) return
 
-    document.querySelector('.temperature .now').innerHTML = `${data.now.temp}°`
-    document.querySelector('.temperature .max').innerHTML = `${data.now.max}°`
-    document.querySelector('.temperature .min').innerHTML = `${data.now.min}°`
-    document.querySelector('.wind .wind_speed').innerHTML = data.now.wind_speed
-    document.querySelector('.wind .wind_direction').innerHTML = data.now.wind_direction
-    document.querySelector('.city_time').innerHTML = this.getCurrentTime(data.now.timezone)
-    document.querySelector('.city_stats .description').innerHTML = data.now.description
+    this.container.querySelector('.temperature .now').innerHTML = `${data.now.temp}°`
+    this.container.querySelector('.temperature .max').innerHTML = `${data.now.max}°`
+    this.container.querySelector('.temperature .min').innerHTML = `${data.now.min}°`
+    this.container.querySelector('.wind .wind_speed').innerHTML = data.now.wind_speed
+    this.container.querySelector('.wind .wind_direction').innerHTML = data.now.wind_direction
+    this.container.querySelector('.city_time').innerHTML = this.getCurrentTime(data.now.timezone)
+    this.container.querySelector('.city_stats .description').innerHTML = data.now.description
     const icons = this.getIconByData(data.now)
-    const iconDiv = document.querySelector('.icon_weather')
+    const iconDiv = this.container.querySelector('.icon_weather')
     iconDiv.innerHTML = this.getIcon(icons)
     iconDiv.classList[data.now.rain ? 'remove' : 'add']('icon_dop_top')
 
-    const hourlyDiv = document.querySelector('.scroll_line')
+    const hourlyDiv = this.container.querySelector('.scroll_line')
     hourlyDiv.innerHTML = ''
 
     for (let i = 0; i < data.hourly.length; ++i) {
@@ -69,7 +70,7 @@ class ForecastView {
         </div>`
     }
 
-    const dailyDiv = document.querySelector('.days_list')
+    const dailyDiv = this.container.querySelector('.days_list')
     dailyDiv.innerHTML = ''
 
     for (let i = 0; i < data.daily.length; ++i) {
@@ -114,6 +115,7 @@ class ForecastView {
   }
 
   destroy() {
+    this.container = null
     this.model.destroy()
     this.model = null
   }

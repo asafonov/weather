@@ -1,18 +1,19 @@
 class ControlView {
   constructor() {
     this.addEventListeners()
-    this.navigationView = new NavigationView()
+    this.container = document.querySelector('#forecast')
+    this.navigationView = new NavigationView(this.container)
     this.forecastViews = []
     const cities = asafonov.cache.getItem('cities')
 
     if (cities && cities.length > 0) {
       for (let i = 0; i < cities.length; ++i) {
-        this.forecastViews.push(new ForecastView(cities[i]))
+        this.forecastViews.push(new ForecastView(cities[i]), this.container)
       }
 
       this.displayForecast()
     } else {
-      const forecastView = new ForecastView(asafonov.settings.defaultCity)
+      const forecastView = new ForecastView(asafonov.settings.defaultCity, this.container)
       forecastView.display()
     }
   }

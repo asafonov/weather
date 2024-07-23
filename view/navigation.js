@@ -1,7 +1,7 @@
 class NavigationView {
  
-  constructor() {
-    const navigationContainer = document.querySelector('.navigation')
+  constructor (container) {
+    const navigationContainer = container.querySelector('.navigation')
     this.addButton = navigationContainer.querySelector('.icon_add')
     this.listButton = navigationContainer.querySelector('.icon_list')
     this.pagesButtons = navigationContainer.querySelector('.pages')
