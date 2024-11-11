@@ -71,10 +71,11 @@ class ForecastView {
     }
 
     const dailyDiv = this.container.querySelector('.days_list')
+
     dailyDiv.innerHTML = ''
 
     for (let i = 0; i < data.daily.length; ++i) {
-      if (! data.daily[i].evening) break
+      if (data.daily[i].evening === undefined || data.daily[i].evening === null) break
 
       dailyDiv.innerHTML +=
         `<div class="item_days_list flex_row centered">

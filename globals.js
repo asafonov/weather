@@ -8,7 +8,7 @@ window.asafonov.events = {
 }
 window.asafonov.settings = {
   apiUrl: 'http://isengard.asafonov.org/api/v1/weather/',
-  defaultCity: 'Belgrade'
+  defaultCity: 'Tver'
 }
 window.onerror = (msg, url, line) => {
   if (!! window.asafonov.debug) alert(`${msg} on line ${line}`)
