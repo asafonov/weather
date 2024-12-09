@@ -8,7 +8,7 @@ class ControlView {
 
     if (cities && cities.length > 0) {
       for (let i = 0; i < cities.length; ++i) {
-        this.forecastViews.push(new ForecastView(cities[i]), this.container)
+        this.forecastViews.push(new ForecastView(cities[i], this.container))
       }
 
       this.displayForecast()
