@@ -5,15 +5,13 @@ class ForecastView {
     this.model = new Forecast(place)
   }
 
-  getPrecipIcons (value, iconName) {
+  getPrecipIcons (value, iconNames) {
     const ret = []
+    const values = [0, 0.25, 2.5, 8]
 
-    if (value > 0) ret.push(iconName)
-    if (value > 0.25) ret.push(iconName)
-    if (value > 2.5) ret.push(iconName)
-    if (value > 8) ret.push(iconName)
-
-    console.log(iconName, value, ret)
+    for (let i = 0; i < values.length; ++i) {
+      if (value > values[i]) ret.push(iconNames[i % iconNames.length])
+    }
 
     return ret
   }
@@ -21,9 +19,13 @@ class ForecastView {
   getIconByData (data) {
     const icons = {main: []}
 
-    if (data.rain || data.snow) {
+    if (data.rain && data.snow) {
       icons.main.push('cloud')
-      icons.precip = this.getPrecipIcons(data.rain, 'raindrop').concat(this.getPrecipIcons(data.snow, 'snowflake'))
+      const precipVariants = data.rain > data.snow ? ['raindrop', 'snowflake'] : ['snowflake', 'raindrop']
+      icons.precip = this.getPrecipIcons(data.rain + data.snow, precipVariants)
+    } else if (data.rain || data.snow) {
+      icons.main.push('cloud')
+      icons.precip = this.getPrecipIcons(data.rain, ['raindrop']).concat(this.getPrecipIcons(data.snow, ['snowflake']))
 
       return icons
     }
