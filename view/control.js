@@ -40,7 +40,7 @@ class ControlView {
   }
 
   onCityAdded ({city}) {
-    this.forecastViews.push(new ForecastView(city))
+    this.forecastViews.push(new ForecastView(city, this.container))
     this.displayForecast(this.forecastViews.length - 1)
   }
 
