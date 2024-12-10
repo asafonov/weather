@@ -21,8 +21,10 @@ class NavigationView {
 
       for (let i = 0; i < cities.length; ++i) {
         const div = document.createElement('div')
-        div.className = 'icon icon_small'
+        div.className = 'icon_wrap icon_small icon_pages'
+
         if (i === city) div.id = 'selected_page'
+
         div.innerHTML = '<svg><use xlink:href="#pages"/></svg>'
         div.addEventListener('click', () => this.selectCity(i))
         this.pagesButtons.appendChild(div)
@@ -34,7 +36,7 @@ class NavigationView {
 
   selectCity (index) {
     asafonov.messageBus.send(asafonov.events.CITY_SELECTED, {index})
-    const pages = this.pagesButtons.querySelectorAll('.icon')
+    const pages = this.pagesButtons.querySelectorAll('.icon_pages')
 
     for (let i = 0; i < pages.length; ++i) {
       if (i === index) {
