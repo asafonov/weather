@@ -18,11 +18,17 @@ class ControlView {
     }
   }
 
+  getCurrentCityIndex() {
+    const index = asafonov.cache.getItem('city')
+
+    if (index === null || index ===undefined || index > this.forecastViews.length - 1) index = this.forecastViews.length - 1
+
+    return index
+  }
+
   displayForecast (index) {
     if (index === null || index === undefined) {
-      index = asafonov.cache.getItem('city')
-
-      if (index === null || index ===undefined || index > this.forecastViews.length - 1) index = this.forecastViews.length - 1
+      index = this.getCurrentCityIndex()
     }
 
     asafonov.cache.set('city', index)
@@ -32,11 +38,13 @@ class ControlView {
   addEventListeners() {
     asafonov.messageBus.subscribe(asafonov.events.CITY_ADDED, this, 'onCityAdded')
     asafonov.messageBus.subscribe(asafonov.events.CITY_SELECTED, this, 'onCitySelected')
+    asafonov.messageBus.subscribe(asafonov.events.CITY_REMOVED, this, 'onCityRemoved')
   }
 
   removeEventListeners() {
     asafonov.messageBus.unsubscribe(asafonov.events.CITY_ADDED, this, 'onCityAdded')
     asafonov.messageBus.unsubscribe(asafonov.events.CITY_SELECTED, this, 'onCitySelected')
+    asafonov.messageBus.unsubscribe(asafonov.events.CITY_REMOVED, this, 'onCityRemoved')
   }
 
   onCityAdded ({city}) {
@@ -46,6 +54,13 @@ class ControlView {
 
   onCitySelected ({index}) {
     this.displayForecast(index)
+  }
+
+  onCityRemoved({index}) {
+    this.displayForecast()
+    this.forecastViews[index].destroy()
+    this.forecastViews[index] = null
+    this.forecastViews.splice(index, 1)
   }
 
   destroy() {

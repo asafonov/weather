@@ -15,6 +15,8 @@ class NavigationView {
     const cities = asafonov.cache.getItem('cities')
     const city = selected || asafonov.cache.getItem('city')
 
+    this.listButton.style.opacity = cities && cities.length > 0 ? 1 : 0
+
     if (cities && cities.length > 1) {
       this.pagesButtons.style.opacity = 1
       this.pagesButtons.innerHTML = ''
@@ -71,6 +73,24 @@ class NavigationView {
   }
 
   onListClick() {
+    if (confirm('Are you sure you want to delete current city?')) {
+      const cities = asafonov.cache.getItem('cities')
+      const city = asafonov.cache.getItem('city')
+      const model = new Forecast(cities[city])
+      model.deleteCachedData()
+      model.destroy()
+      cities.splice(city, 1)
+      asafonov.cache.remove('city')
+
+      if (cities.length > 0) {
+        asafonov.cache.set('cities', cities)
+      } else {
+        asafonov.cache.remove('cities')
+      }
+
+      this.updatePagesButtons(cities.length -1)
+      asafonov.messageBus.send(asafonov.events.CITY_REMOVED, {index: city})
+    }
   }
 
   addEventListeners() {

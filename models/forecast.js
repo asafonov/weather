@@ -26,6 +26,10 @@ class Forecast {
     }
   }
 
+  deleteCachedData() {
+    asafonov.cache.remove(this.place)
+  }
+
   getCachedData() {
     return asafonov.cache.getItem(this.place)
   }
