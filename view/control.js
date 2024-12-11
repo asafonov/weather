@@ -19,7 +19,7 @@ class ControlView {
   }
 
   getCurrentCityIndex() {
-    const index = asafonov.cache.getItem('city')
+    let index = asafonov.cache.getItem('city')
 
     if (index === null || index ===undefined || index > this.forecastViews.length - 1) index = this.forecastViews.length - 1
 
