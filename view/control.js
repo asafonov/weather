@@ -31,8 +31,10 @@ class ControlView {
       index = this.getCurrentCityIndex()
     }
 
-    asafonov.cache.set('city', index)
-    this.forecastViews[index].display()
+    if (index > -1) {
+      asafonov.cache.set('city', index)
+      this.forecastViews[index].display()
+    }
   }
 
   addEventListeners() {
@@ -57,10 +59,10 @@ class ControlView {
   }
 
   onCityRemoved({index}) {
-    this.displayForecast()
     this.forecastViews[index].destroy()
     this.forecastViews[index] = null
     this.forecastViews.splice(index, 1)
+    this.displayForecast()
   }
 
   destroy() {
