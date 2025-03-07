@@ -26,6 +26,10 @@ class Forecast {
     }
   }
 
+  deleteCachedData() {
+    asafonov.cache.remove(this.place)
+  }
+
   getCachedData() {
     return asafonov.cache.getItem(this.place)
   }
@@ -54,7 +58,7 @@ class Forecast {
               if (data.daily[index].snow < 0.5) data.daily[index].snow = 0
             }
 
-            data.daily.push({rain: 0, snow: 0, clouds: 0, wind_speed: 0, day: apiResp[i].day})
+            data.daily.push({rain: 0, snow: 0, clouds: 0, wind_speed: 0, day: apiResp[i].day, date: apiResp[i].date})
             prevDate = d
           }
 

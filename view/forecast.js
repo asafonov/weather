@@ -5,29 +5,76 @@ class ForecastView {
     this.model = new Forecast(place)
   }
 
-  getIconByData (data) {
-    const icons = []
-    icons.push(data.clouds > 75 || data.rain || data.snow ? 'cloud' : data.hour >= '20' || data.hour < '08' ? 'moon' : 'sun')
+  getPrecipIcons (value, iconNames) {
+    const ret = []
+    const values = [0, 0.25, 2.5, 8]
 
-    if (! data.rain && ! data.snow && data.clouds >= 25 && data.clouds <= 75) icons.push('cloud')
-    if (data.rain) icons.push('rain')
-    if (data.rain > 1) icons.push('rain')
-    if (data.wind_speed > 8) icons.push('wind')
-    if (icons.length > 1 && icons[0] === 'cloud') icons[0] = 'cloud_with'
+    for (let i = 0; i < values.length; ++i) {
+      if (value > values[i]) ret.push(iconNames[i % iconNames.length])
+    }
+
+    return ret
+  }
+
+  getIconByData (data) {
+    const icons = {main: []}
+
+    if (data.rain && data.snow) {
+      icons.main.push('cloud')
+      const precipVariants = data.rain > data.snow ? ['raindrop', 'snowflake'] : ['snowflake', 'raindrop']
+      icons.precip = this.getPrecipIcons(data.rain + data.snow, precipVariants)
+    } else if (data.rain || data.snow) {
+      icons.main.push('cloud')
+      icons.precip = this.getPrecipIcons(data.rain, ['raindrop']).concat(this.getPrecipIcons(data.snow, ['snowflake']))
+
+      return icons
+    }
+
+    icons.main.push(data.clouds > 75 ? 'cloudy' : data.hour >= '20' || data.hour < '08' ? 'moon' : 'sun')
+    if (data.clouds >= 25 && data.clouds <= 75) icons.main.push('cloudy')
+    if (data.wind_speed > 8) icons.main.push('wind')
 
     return icons
   }
 
   getIcon (icons) {
-    let ret = `<svg ${icons.length > 1 ? 'class="icon_with"' : ''}><use xlink:href="#${icons[0]}" /></svg>`
-    if (icons.length > 1) ret += `<svg class="icon_dop"><use xlink:href="#${icons[1]}" /></svg>`
-    if (icons.length > 2) ret += `<svg class="icon_dop dop_second dop_duo"><use xlink:href="#${icons[2]}" /></svg>`
-    return ret
+    let ret = ''
+
+    if (icons.precip && icons.precip.length > 0) {
+      ret += `<div class="icon_main"><svg><use xlink:href="#${icons.main[0]}"/></svg></div><div class="icon_precip">`
+
+      for (let i = 0; i < icons.precip.length; ++i) {
+        ret += `<svg><use xlink:href="#${icons.precip[i]}"/></svg>`
+      }
+
+      ret += '</div>'
+
+      return [ret, ['icon_with_precip']]
+    }
+
+    for (let i = 0; i < icons.main.length; ++i) {
+      ret += `<div class="icon_wrap"><svg><use xlink:href="#${icons.main[i]}"/></svg></div>`
+    }
+
+    const classes = []
+    icons.main.length === 2 && classes.push('icon_double')
+    icons.main.length === 3 && classes.push('icon_tripple')
+
+    return [ret, classes]
   }
 
-  getDayName (day) {
-    const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    return dayNames[day - 1]
+  getDayName (day, date) {
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    let ret = dayNames[day - 1]
+
+    if (date) {
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      const m = parseInt(date.substr(5, 2), 10)
+      const d = date.substr(8, 2)
+      ret += `,&nbsp;${monthNames[m - 1]}&nbsp;${d}`
+    }
+
+    return ret
   }
 
   async display() {
@@ -52,19 +99,21 @@ class ForecastView {
     this.container.querySelector('.city_time').innerHTML = this.getCurrentTime(data.now.timezone)
     this.container.querySelector('.city_stats .description').innerHTML = data.now.description
     const icons = this.getIconByData(data.now)
-    const iconDiv = this.container.querySelector('.icon_weather')
-    iconDiv.innerHTML = this.getIcon(icons)
-    iconDiv.classList[data.now.rain ? 'remove' : 'add']('icon_dop_top')
+    const iconDiv = this.container.querySelector('.icon_big')
+    const [html, classes] = this.getIcon(icons)
+    iconDiv.innerHTML = html
+    classes.map(i => iconDiv.classList.add(i))
 
     const hourlyDiv = this.container.querySelector('.scroll_line')
     hourlyDiv.innerHTML = ''
 
     for (let i = 0; i < data.hourly.length; ++i) {
+      const [html, classes] = this.getIcon(this.getIconByData(data.hourly[i]))
       hourlyDiv.innerHTML +=
         `<div class="item_scroll_line flex_col centered">
           <div class="text_accent">${data.hourly[i].hour}</div>
-          <div class="icon icon_weather icon_normal${data.hourly[i].rain ? '' : ' icon_dop_top'}">
-            ${this.getIcon(this.getIconByData(data.hourly[i]))}
+          <div class="icon_wrap icon_normal icon_scroll_line ${classes.join(' ')}">
+            ${html}
           </div>
           <div class="text_h3">${data.hourly[i].temp}°</div>
         </div>`
@@ -77,22 +126,23 @@ class ForecastView {
     for (let i = 0; i < data.daily.length; ++i) {
       if (data.daily[i].evening === undefined || data.daily[i].evening === null) break
 
+      const [html, classes] = this.getIcon(this.getIconByData(data.daily[i]))
       dailyDiv.innerHTML +=
         `<div class="item_days_list flex_row centered">
-          <div class="day_name">${i === 0 ? 'Tomorrow' : this.getDayName(data.daily[i].day)}</div>
+          <div class="day_name">${i === 0 ? 'Tomorrow' : this.getDayName(data.daily[i].day, data.daily[i].date)}</div>
           <div class="right_part flex_row centered">
-            <div class="icon icon_weather icon_normal${data.daily[i].rain ? '' : ' icon_dop_top'}">
-              ${this.getIcon(this.getIconByData(data.daily[i]))}
+            <div class="icon_wrap icon_normal ${classes.join(' ')}">
+              ${html}
             </div>
             <div class="temperature flex_row">
               <div class="text_accent">${data.daily[i].morning}°</div>
-              <div class="icon icon_small">
+              <div class="icon_wrap icon_small icon_opact">
                 <svg>
                   <use xlink:href="#sun_up"/>
                 </svg>
               </div>
               <div class="text_h3">${data.daily[i].temp}°</div>
-              <div class="icon icon_small">
+              <div class="icon_wrap icon_small icon_opact">
                 <svg>
                   <use xlink:href="#sun_down"/>
                 </svg>
@@ -102,7 +152,7 @@ class ForecastView {
             <div class="wind flex_row centered">
               <div class="power">${data.daily[i].wind_speed}</div>
               <div class="direction flex_col centered">
-                <div class="icon icon_fill icon_compas compas_se">
+                <div class="icon_wrap icon_fill icon_compas compas_se">
                   <svg>
                     <use xlink:href="#direction"/>
                   </svg>
