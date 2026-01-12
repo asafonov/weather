@@ -40,6 +40,7 @@ class Forecast {
     if (! data) {
       data = {hourly: [], daily: []}
       const url = `${asafonov.settings.apiUrl}/?place=${this.place}`
+
       try {
         const apiResp = await (await fetch(url)).json()
         const date = apiResp[0].date.substr(0, 10)
@@ -54,11 +55,11 @@ class Forecast {
           if (d !== prevDate) {
             if (data.daily.length > 0) {
               const index = data.daily.length - 1
-              if (data.daily[index].rain < 0.5) data.daily[index].rain = 0
-              if (data.daily[index].snow < 0.5) data.daily[index].snow = 0
+              if (data.daily[index].total_rain < 0.5) data.daily[index].rain = 0
+              if (data.daily[index].total_snow < 0.5) data.daily[index].snow = 0
             }
 
-            data.daily.push({rain: 0, snow: 0, clouds: 0, wind_speed: 0, day: apiResp[i].day, date: apiResp[i].date})
+            data.daily.push({rain: 0, snow: 0, clouds: 0, wind_speed: 0, day: apiResp[i].day, date: apiResp[i].date, total_rain: 0, total_snow: 0})
             prevDate = d
           }
 
@@ -69,6 +70,8 @@ class Forecast {
             const index = data.daily.length - 1
             data.daily[index].rain = Math.max(apiResp[i].rain || 0, data.daily[index].rain)
             data.daily[index].snow = Math.max(apiResp[i].snow || 0, data.daily[index].snow)
+            data.daily[index].total_rain += apiResp[i].rain || 0
+            data.daily[index].total_snow += apiResp[i].snow || 0
             data.daily[index].wind_speed = Math.max(apiResp[i].wind_speed || 0, data.daily[index].wind_speed)
             data.daily[index].clouds += (apiResp[i].clouds || 0) / 8
 
