@@ -404,7 +404,8 @@ svg * {
 }
 
 .navigation .search_section .search_field,
-.navigation .search_section .search_result_list {
+.navigation .search_section .search_result_list,
+.navigation .settings_list {
   width: 100%;
   background-color: var(--color_secondary);
   border-radius: var(--size8);
@@ -440,7 +441,8 @@ svg * {
   outline: none;
 }
 
-.navigation .search_result_list {
+.navigation .search_result_list,
+.navigation .settings_list {
   position: absolute;
   z-index: 99;
   top: 100%;
@@ -448,7 +450,12 @@ svg * {
   gap: var(--size8);
 }
 
-.navigation .search_result_list .divider {
+.navigation .settings_list {
+  top: 0
+}
+
+.navigation .search_result_list .divider,
+.navigation .settings_list .divider {
   width: 100%;
   left: 0;
   background-color: var(--color_primary);
