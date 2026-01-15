@@ -5,6 +5,14 @@ class ForecastView {
     this.model = new Forecast(place)
   }
 
+  toFahrenheit (v) {
+    return Math.round(v * 9 / 5 + 32)
+  }
+
+  toMPH (v) {
+    return Math.round(v * 2.23694)
+  }
+
   getPrecipIcons (value, iconNames) {
     const ret = []
     const values = [0, 0.25, 2.5, 8]
@@ -104,10 +112,13 @@ class ForecastView {
   displayData (data) {
     if (! data) return
 
-    this.container.querySelector('.temperature .now').innerHTML = `${data.now.temp}°`
-    this.container.querySelector('.temperature .max').innerHTML = `${data.now.max}°`
-    this.container.querySelector('.temperature .min').innerHTML = `${data.now.min}°`
-    this.container.querySelector('.wind .wind_speed').innerHTML = data.now.wind_speed
+    const useImperialSystem = !! asafonov.cache.getItem('useImperialSystem')
+    document.documentElement.style.setProperty('--after-system', useImperialSystem ? '"mph"' : '"m/s"')
+
+    this.container.querySelector('.temperature .now').innerHTML = `${useImperialSystem ? this.toFahrenheit(data.now.temp) : data.now.temp}°`
+    this.container.querySelector('.temperature .max').innerHTML = `${useImperialSystem ? this.toFahrenheit(data.now.max) : data.now.max}°`
+    this.container.querySelector('.temperature .min').innerHTML = `${useImperialSystem ? this.toFahrenheit(data.now.min) : data.now.min}°`
+    this.container.querySelector('.wind .wind_speed').innerHTML = useImperialSystem ? this.toMPH(data.now.wind_speed) : data.now.wind_speed
     this.container.querySelector('.wind .wind_direction').innerHTML = data.now.wind_direction
     this.container.querySelector('.wind .icon_compas').style.transform = `rotate(${this.getWindRotation(data.now.wind_direction)}deg)`
     this.container.querySelector('.city_time').innerHTML = this.getCurrentTime(data.now.timezone)
@@ -129,7 +140,7 @@ class ForecastView {
           <div class="icon_wrap icon_normal icon_scroll_line ${classes.join(' ')}">
             ${html}
           </div>
-          <div class="text_h3">${data.hourly[i].temp}°</div>
+          <div class="text_h3">${useImperialSystem ? this.toFahrenheit(data.hourly[i].temp) : data.hourly[i].temp}°</div>
         </div>`
     }
 
@@ -149,22 +160,22 @@ class ForecastView {
               ${html}
             </div>
             <div class="temperature flex_row">
-              <div class="text_accent">${data.daily[i].morning}°</div>
+              <div class="text_accent">${useImperialSystem ? this.toFahrenheit(data.daily[i].morning) : data.daily[i].morning}°</div>
               <div class="icon_wrap icon_small icon_opact">
                 <svg>
                   <use xlink:href="#sun_up"/>
                 </svg>
               </div>
-              <div class="text_h3">${data.daily[i].temp}°</div>
+              <div class="text_h3">${useImperialSystem ? this.toFahrenheit(data.daily[i].temp) : data.daily[i].temp}°</div>
               <div class="icon_wrap icon_small icon_opact">
                 <svg>
                   <use xlink:href="#sun_down"/>
                 </svg>
               </div>
-              <div class="text_accent">${data.daily[i].evening}°</div>
+              <div class="text_accent">${useImperialSystem ? this.toFahrenheit(data.daily[i].evening) : data.daily[i].evening}°</div>
             </div>
             <div class="wind flex_row centered">
-              <div class="power">${data.daily[i].wind_speed}</div>
+              <div class="power">${useImperialSystem ? this.toMPH(data.daily[i].wind_speed) : data.daily[i].wind_speed}</div>
               <div class="direction flex_col centered">
                 <div class="icon_wrap icon_fill icon_compas compas_se" style="transform: rotate(${this.getWindRotation(data.daily[i].wind_direction)}deg)">
                   <svg>

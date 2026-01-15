@@ -5,10 +5,21 @@ class NavigationView {
     this.addButton = navigationContainer.querySelector('.icon_add')
     this.listButton = navigationContainer.querySelector('.icon_list')
     this.pagesButtons = navigationContainer.querySelector('.pages')
+    this.menuContainer = navigationContainer.querySelector('.settings_list')
+    this.deleteCityButton = this.menuContainer.querySelector('.delete_city')
+    this.useSystemButton = this.menuContainer.querySelector('.use_system')
+    this.useImperialSystem = !! asafonov.cache.getItem('useImperialSystem')
+    this.updateUseSystemButtonTitle()
     this.onAddClickProxy = this.onAddClick.bind(this)
     this.onListClickProxy = this.onListClick.bind(this)
+    this.deleteCityProxy = this.deleteCity.bind(this)
+    this.useSystemProxy = this.useSystem.bind(this)
     this.addEventListeners()
     this.updatePagesButtons()
+  }
+
+  updateUseSystemButtonTitle() {
+    this.useSystemButton.innerHTML = this.useImperialSystem ? 'Use metric system' : 'Use imperial system'
   }
 
   updatePagesButtons (selected) {
@@ -73,6 +84,26 @@ class NavigationView {
   }
 
   onListClick() {
+    this.menuContainer.style.display = 'flex'
+  }
+
+  useSystem() {
+    this.menuContainer.style.display = 'none'
+    this.useImperialSystem = ! this.useImperialSystem
+    this.updateUseSystemButtonTitle()
+
+    if (this.useImperialSystem) {
+      asafonov.cache.set('useImperialSystem', '1')
+    } else {
+      asafonov.cache.remove('useImperialSystem')
+    }
+
+    asafonov.messageBus.send(asafonov.events.USE_SYSTEM_UPDATED)
+  }
+
+  deleteCity() {
+    this.menuContainer.style.display = 'none'
+
     if (confirm('Are you sure you want to delete current city?')) {
       const cities = asafonov.cache.getItem('cities')
       const city = asafonov.cache.getItem('city')
@@ -96,11 +127,15 @@ class NavigationView {
   addEventListeners() {
     this.addButton.addEventListener('click', this.onAddClickProxy)
     this.listButton.addEventListener('click', this.onListClickProxy)
+    this.deleteCityButton.addEventListener('click', this.deleteCityProxy)
+    this.useSystemButton.addEventListener('click', this.useSystemProxy)
   }
 
   removeEventListeners() {
     this.addButton.removeEventListener('click', this.onAddClickProxy)
     this.listButton.removeEventListener('click', this.onListClickProxy)
+    this.deleteCityButton.removeEventListener('click', this.deleteCityProxy)
+    this.useSystemButton.removeEventListener('click', this.useSystemProxy)
   }
 
   destroy() {

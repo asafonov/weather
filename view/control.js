@@ -41,12 +41,19 @@ class ControlView {
     asafonov.messageBus.subscribe(asafonov.events.CITY_ADDED, this, 'onCityAdded')
     asafonov.messageBus.subscribe(asafonov.events.CITY_SELECTED, this, 'onCitySelected')
     asafonov.messageBus.subscribe(asafonov.events.CITY_REMOVED, this, 'onCityRemoved')
+    asafonov.messageBus.subscribe(asafonov.events.USE_SYSTEM_UPDATED, this, 'onUseSystemUpdated')
   }
 
   removeEventListeners() {
     asafonov.messageBus.unsubscribe(asafonov.events.CITY_ADDED, this, 'onCityAdded')
     asafonov.messageBus.unsubscribe(asafonov.events.CITY_SELECTED, this, 'onCitySelected')
     asafonov.messageBus.unsubscribe(asafonov.events.CITY_REMOVED, this, 'onCityRemoved')
+    asafonov.messageBus.unsubscribe(asafonov.events.USE_SYSTEM_UPDATED, this, 'onUseSystemUpdated')
+  }
+
+  onUseSystemUpdated() {
+    const index = this.getCurrentCityIndex()
+    this.displayForecast(index)
   }
 
   onCityAdded ({city}) {
