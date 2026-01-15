@@ -26,7 +26,7 @@ class NavigationView {
     const cities = asafonov.cache.getItem('cities')
     const city = selected || asafonov.cache.getItem('city')
 
-    this.listButton.style.opacity = cities && cities.length > 0 ? 1 : 0
+    this.deleteCityButton.style.display = cities && cities.length > 0 ? 'flex' : 'none'
 
     if (cities && cities.length > 1) {
       this.pagesButtons.style.opacity = 1

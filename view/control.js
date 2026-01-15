@@ -13,8 +13,8 @@ class ControlView {
 
       this.displayForecast()
     } else {
-      const forecastView = new ForecastView(asafonov.settings.defaultCity, this.container)
-      forecastView.display()
+      this.defaultForecastView = new ForecastView(asafonov.settings.defaultCity, this.container)
+      this.defaultForecastView.display()
     }
   }
 
@@ -53,7 +53,11 @@ class ControlView {
 
   onUseSystemUpdated() {
     const index = this.getCurrentCityIndex()
-    this.displayForecast(index)
+
+    if (index > -1)
+      this.displayForecast(index)
+    else if (this.defaultForecastView)
+      this.defaultForecastView.display()
   }
 
   onCityAdded ({city}) {
@@ -81,6 +85,7 @@ class ControlView {
     this.forecastViews = null
     this.navigationView.destroy()
     this.navigationView = null
+    this.defaultForecastView = null
     this.removeEventListeners()
   }
 }
