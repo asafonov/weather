@@ -467,6 +467,7 @@ svg * {
   justify-content: center;
   align-items: center;
   background-color: rgba(34, 38, 38, 0.8);
+  display: none;
 }
 
 .popup_window .popup_block {
