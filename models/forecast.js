@@ -1,8 +1,18 @@
 class Forecast {
 
-  constructor (place) {
+  constructor (place, lat, lon) {
     const capitalize = v => v.charAt(0).toUpperCase() + v.slice(1).toLowerCase()
-    this.place = place.split(' ').map(i => capitalize(i)).join(' ')
+    this.initPlace(place, lat, lon)
+  }
+
+  async initPlace (place, lat, lon) {
+    if (place) {
+      this.place = place.split(' ').map(i => capitalize(i)).join(' ')
+    } else {
+      this.lat = lat
+      this.lon = lon
+      this.getData()
+    }
   }
 
   getPlace() {
@@ -35,11 +45,11 @@ class Forecast {
   }
 
   async getData() {
-    let data = asafonov.cache.get(this.place)
+    let data = this.place ? asafonov.cache.get(this.place) : null
 
     if (! data) {
       data = {hourly: [], daily: []}
-      const url = `${asafonov.settings.apiUrl}/?place=${this.place}`
+      const url = `${asafonov.settings.apiUrl}/?` + (this.place ? `place=${this.place}` : `lat=${lat}&lon=${lon}`)
 
       try {
         const apiResp = await (await fetch(url)).json()
@@ -47,6 +57,10 @@ class Forecast {
         let maxToday = apiResp[0].temp
         let minToday = apiResp[0].temp
         let prevDate = date
+
+        if (! this.place) {
+          this.place = apiResp[0].place
+        }
 
         for (let i = 1; i < apiResp.length; ++i) {
           let d = apiResp[i].date.substr(0, 10)
@@ -98,7 +112,7 @@ class Forecast {
           ...this.formatData(apiResp[0]), ...{max: maxToday, min: minToday, timezone: apiResp[0].timezone}
         }
 
-        asafonov.cache.set(this.getPlace(), data)
+        this.place && asafonov.cache.set(this.place, data)
       } catch (e) {
         console.error(e)
         return
@@ -110,6 +124,9 @@ class Forecast {
 
   destroy() {
     this.place = null
+    this.lat = null
+    this.lon = null
+    this.data = null
   }
 
 }

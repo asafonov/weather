@@ -1,8 +1,8 @@
 class ForecastView {
 
-  constructor (place, container) {
+  constructor (place, container, lat, lon) {
     this.container = container
-    this.model = new Forecast(place)
+    this.model = new Forecast(place, lat, lon)
   }
 
   toFahrenheit (v) {
