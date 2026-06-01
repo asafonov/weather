@@ -12,6 +12,8 @@ class ControlView {
       }
 
       this.displayForecast()
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => alert(position), error => alert('error'))
     } else {
       this.defaultForecastView = new ForecastView(asafonov.settings.defaultCity, this.container)
       this.defaultForecastView.display()
