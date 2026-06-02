@@ -1,18 +1,21 @@
 class Forecast {
 
   constructor (place, lat, lon) {
-    const capitalize = v => v.charAt(0).toUpperCase() + v.slice(1).toLowerCase()
     this.initPlace(place, lat, lon)
   }
 
   async initPlace (place, lat, lon) {
     if (place) {
-      this.place = place.split(' ').map(i => capitalize(i)).join(' ')
+      this.place = place.split(' ').map(i => this.capitalize(i)).join(' ')
     } else {
       this.lat = lat
       this.lon = lon
       this.getData()
     }
+  }
+
+  capitalize (v) {
+    return v.charAt(0).toUpperCase() + v.slice(1).toLowerCase()
   }
 
   getPlace() {
