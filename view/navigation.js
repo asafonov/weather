@@ -81,7 +81,7 @@ class NavigationView {
 
         if (cities.indexOf(city) === -1) {
           cities.push(city)
-          asafonov.messageBus.send(asafonov.events.CITY_ADDED, {city})
+          asafonov.messageBus.send(asafonov.events.CITY_ADDED, {city, cities})
           asafonov.cache.set('cities', cities)
           this.updatePagesButtons()
         }

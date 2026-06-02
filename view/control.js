@@ -4,7 +4,15 @@ class ControlView {
     this.container = document.querySelector('#forecast')
     this.navigationView = new NavigationView(this.container)
     this.forecastViews = []
-    const cities = asafonov.cache.getItem('cities')
+    const cities = asafonov.cache.getItem('cities') || []
+
+    if (cities.length > 0) {
+      for (let i = 0; i < cities.length; ++i) {
+        this.forecastViews.push(new ForecastView(cities[i], this.container))
+      }
+    } else {
+      this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity), this.container)
+    }
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -12,27 +20,16 @@ class ControlView {
           const lat = position.coords.latitude
           const lon = position.coords.longitude
           this.forecastViews.push(new ForecastView(null, this.container, lat, lon))
-          this.initForecast(true)
+          this.displayForecast(cities.length)
         },
-        error => this.initForecast(false)
+        error => {
+          this.displayForecast()
+        }
       )
     } else {
-      this.initForecast(false)
-    }
-
-  }
-
-  initForecast (geoSuccess) {
-    if (cities && cities.length > 0) {
-      for (let i = 0; i < cities.length; ++i) {
-        this.forecastViews.push(new ForecastView(cities[i], this.container))
-      }
-
       this.displayForecast()
-    } else if (! geoSuccess) {
-      this.defaultForecastView = new ForecastView(asafonov.settings.defaultCity, this.container)
-      this.defaultForecastView.display()
     }
+
   }
 
   getCurrentCityIndex() {
@@ -45,13 +42,11 @@ class ControlView {
 
   displayForecast (index) {
     if (index === null || index === undefined) {
-      index = this.getCurrentCityIndex()
+      index = this.getCurrentCityIndex() || 0
     }
 
-    if (index > -1) {
-      asafonov.cache.set('city', index)
-      this.forecastViews[index].display()
-    }
+    asafonov.cache.set('city', index)
+    this.forecastViews[index].display()
   }
 
   addEventListeners() {
@@ -69,16 +64,18 @@ class ControlView {
   }
 
   onUseSystemUpdated() {
-    const index = this.getCurrentCityIndex()
-
-    if (index > -1)
-      this.displayForecast(index)
-    else if (this.defaultForecastView)
-      this.defaultForecastView.display()
+    const index = this.getCurrentCityIndex() || 0
+    this.displayForecast(index)
   }
 
-  onCityAdded ({city}) {
-    this.forecastViews.push(new ForecastView(city, this.container))
+  onCityAdded ({city, cities}) {
+    if (cities.length === 1) {
+      this.forecastViews[0].destroy()
+      this.forecastViews[0] = new  ForecastView(city, this.container)
+    } else {
+      this.forecastViews.push(new ForecastView(city, this.container))
+    }
+
     this.displayForecast(this.forecastViews.length - 1)
   }
 
@@ -102,7 +99,6 @@ class ControlView {
     this.forecastViews = null
     this.navigationView.destroy()
     this.navigationView = null
-    this.defaultForecastView = null
     this.removeEventListeners()
   }
 }
