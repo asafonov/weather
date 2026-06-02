@@ -21,13 +21,13 @@ class ControlView {
           this.displayForecast(cities.length)
         },
         error => {
+          cities.length === 0 && this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
           this.displayForecast()
-          this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
         }
       )
     } else {
+      cities.length === 0 && this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
       this.displayForecast()
-      this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
     }
   }
 

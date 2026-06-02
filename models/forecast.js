@@ -52,7 +52,7 @@ class Forecast {
 
     if (! data) {
       data = {hourly: [], daily: []}
-      const url = `${asafonov.settings.apiUrl}/?` + (this.place ? `place=${this.place}` : `lat=${lat}&lon=${lon}`)
+      const url = `${asafonov.settings.apiUrl}/?` + (this.place ? `place=${this.place}` : `lat=${this.lat}&lon=${this.lon}`)
 
       try {
         const apiResp = await (await fetch(url)).json()
