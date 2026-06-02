@@ -1,4 +1,3 @@
-class ForecastView {
 
   constructor (place, container, lat, lon) {
     this.container = container
@@ -86,7 +85,14 @@ class ForecastView {
   }
 
   async display() {
-    this.container.querySelector('.city_name').innerHTML = this.model.getPlace()
+    const place = this.model.getPlace()
+
+    if (! place) {
+      setTimeout(() => this.display(), 200)
+      return
+    }
+
+    this.container.querySelector('.city_name').innerHTML = place
     this.displayData(this.model.getCachedData())
     const data = await this.model.getData()
     this.displayData(data)
