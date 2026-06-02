@@ -4,7 +4,6 @@ class ControlView {
     this.container = document.querySelector('#forecast')
     this.navigationView = new NavigationView(this.container)
     this.forecastViews = []
-    this.geoSuccess = false
     const cities = asafonov.cache.getItem('cities')
 
     if (navigator.geolocation) {
@@ -13,19 +12,24 @@ class ControlView {
           const lat = position.coords.latitude
           const lon = position.coords.longitude
           this.forecastViews.push(new ForecastView(null, this.container, lat, lon))
-          this.geoSuccess = true
+          this.initForecast(true)
         },
-        error => this.geoSuccess = false
+        error => this.initForecast(false)
       )
+    } else {
+      this.initForecast(false)
     }
 
+  }
+
+  initForecast (geoSuccess) {
     if (cities && cities.length > 0) {
       for (let i = 0; i < cities.length; ++i) {
         this.forecastViews.push(new ForecastView(cities[i], this.container))
       }
 
       this.displayForecast()
-    } else if (! this.geoSuccess) {
+    } else if (! geoSuccess) {
       this.defaultForecastView = new ForecastView(asafonov.settings.defaultCity, this.container)
       this.defaultForecastView.display()
     }
