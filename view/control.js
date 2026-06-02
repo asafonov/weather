@@ -10,8 +10,6 @@ class ControlView {
       for (let i = 0; i < cities.length; ++i) {
         this.forecastViews.push(new ForecastView(cities[i], this.container))
       }
-    } else {
-      this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
     }
 
     if (navigator.geolocation) {
@@ -24,12 +22,13 @@ class ControlView {
         },
         error => {
           this.displayForecast()
+          this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
         }
       )
     } else {
       this.displayForecast()
+      this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
     }
-
   }
 
   getCurrentCityIndex() {
