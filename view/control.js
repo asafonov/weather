@@ -11,7 +11,7 @@ class ControlView {
         this.forecastViews.push(new ForecastView(cities[i], this.container))
       }
     } else {
-      this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity), this.container)
+      this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
     }
 
     if (navigator.geolocation) {
