@@ -3,7 +3,7 @@ class ControlView {
     this.addEventListeners()
     this.container = document.querySelector('#forecast')
     this.forecastViews = []
-    const geoUsed = false
+    let geoUsed = false
     const cities = asafonov.cache.getItem('cities') || []
 
     if (cities.length > 0) {
