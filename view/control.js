@@ -3,7 +3,6 @@ class ControlView {
     this.addEventListeners()
     this.container = document.querySelector('#forecast')
     this.forecastViews = []
-    let geoUsed = false
     const cities = asafonov.cache.getItem('cities') || []
 
     if (cities.length > 0) {
@@ -15,23 +14,24 @@ class ControlView {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
-          geoUsed = true
           const lat = position.coords.latitude
           const lon = position.coords.longitude
           this.forecastViews.push(new ForecastView(null, this.container, lat, lon))
           this.displayForecast(cities.length)
+          this.navigationView = new NavigationView(this.container, false)
         },
         error => {
           cities.length === 0 && this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
           this.displayForecast()
+          this.navigationView = new NavigationView(this.container, false)
         }
       )
     } else {
       cities.length === 0 && this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
       this.displayForecast()
+      this.navigationView = new NavigationView(this.container, false)
     }
 
-    this.navigationView = new NavigationView(this.container, geoUsed)
   }
 
   getCurrentCityIndex() {
