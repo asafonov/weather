@@ -1,6 +1,7 @@
 class NavigationView {
  
-  constructor (container) {
+  constructor (container, geoUsed) {
+    this.geoUsed = geoUsed
     const navigationContainer = container.querySelector('.navigation')
     this.addButton = navigationContainer.querySelector('.icon_add')
     this.listButton = navigationContainer.querySelector('.icon_list')
@@ -35,12 +36,13 @@ class NavigationView {
     const city = selected || asafonov.cache.getItem('city')
 
     this.setMenuButtonVisibility('deleteCityButton', cities && cities.length > 0)
+    const showPagesButtons = cities && (cities.length > 1 || (cities.length > 0 && this.geoUsed))
 
-    if (cities && cities.length > 1) {
+    if (showPagesButtons) {
       this.pagesButtons.style.opacity = 1
       this.pagesButtons.innerHTML = ''
 
-      for (let i = 0; i < cities.length; ++i) {
+      for (let i = 0; i < cities.length + (this.geoUsed ? 1 : 0); ++i) {
         const div = document.createElement('div')
         div.className = 'icon_wrap icon_small icon_pages'
 
@@ -156,6 +158,7 @@ class NavigationView {
     this.addButton = null
     this.pagesButtons.innerHTML = ''
     this.pagesButtons = null
+    this.geoUsed = null
   }
 
 }

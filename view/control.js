@@ -2,8 +2,8 @@ class ControlView {
   constructor() {
     this.addEventListeners()
     this.container = document.querySelector('#forecast')
-    this.navigationView = new NavigationView(this.container)
     this.forecastViews = []
+    const geoUsed = false
     const cities = asafonov.cache.getItem('cities') || []
 
     if (cities.length > 0) {
@@ -15,6 +15,7 @@ class ControlView {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
+          geoUsed = true
           const lat = position.coords.latitude
           const lon = position.coords.longitude
           this.forecastViews.push(new ForecastView(null, this.container, lat, lon))
@@ -29,6 +30,8 @@ class ControlView {
       cities.length === 0 && this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
       this.displayForecast()
     }
+
+    this.navigationView = new NavigationView(this.container, geoUsed)
   }
 
   getCurrentCityIndex() {
