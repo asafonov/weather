@@ -18,7 +18,7 @@ class ControlView {
           const lon = position.coords.longitude
           this.forecastViews.push(new ForecastView(null, this.container, lat, lon))
           this.displayForecast(cities.length)
-          this.navigationView = new NavigationView(this.container, false)
+          this.navigationView = new NavigationView(this.container, true)
         },
         error => {
           cities.length === 0 && this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
