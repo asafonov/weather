@@ -55,6 +55,8 @@ class ControlView {
   }
 
   displayForecast (index) {
+    this.container.style.visibility = 'visible'
+
     if (index === null || index === undefined) {
       index = this.getCurrentCityIndex() || 0
     }
