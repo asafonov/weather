@@ -12,18 +12,30 @@ class ControlView {
     }
 
     if (navigator.geolocation) {
+      const timeout = setTimeout(() => {
+        cities.length === 0 && this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
+        this.displayForecast()
+        this.navigationView = new NavigationView(this.container, false)
+      }, 3000)
+
       navigator.geolocation.getCurrentPosition(
         position => {
-          const lat = position.coords.latitude
-          const lon = position.coords.longitude
-          this.forecastViews.push(new ForecastView(null, this.container, lat, lon))
-          this.displayForecast(cities.length)
-          this.navigationView = new NavigationView(this.container, true)
+          if (timeout) {
+            clearTimeout(timeout)
+            const lat = position.coords.latitude
+            const lon = position.coords.longitude
+            this.forecastViews.push(new ForecastView(null, this.container, lat, lon))
+            this.displayForecast(cities.length)
+            this.navigationView = new NavigationView(this.container, true)
+          }
         },
         error => {
-          cities.length === 0 && this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
-          this.displayForecast()
-          this.navigationView = new NavigationView(this.container, false)
+          if (timeout) {
+            clearTimeout(timeout)
+            cities.length === 0 && this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
+            this.displayForecast()
+            this.navigationView = new NavigationView(this.container, false)
+          }
         }
       )
     } else {
