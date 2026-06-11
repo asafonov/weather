@@ -2,6 +2,9 @@ window.asafonov = {}
 window.asafonov.version = '0.1'
 window.asafonov.messageBus = new MessageBus()
 window.asafonov.cache = new Cache(600000)
+window.asafonov.request = new Request(
+  'kj;gadojknm,nvdw;[kjk;jsnm.gdsiotkkkk;spalksjndpit]]iw'
+)
 window.asafonov.events = {
   CITY_ADDED: 'CITY_ADDED',
   CITY_SELECTED: 'CITY_SELECTED',

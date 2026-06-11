@@ -55,7 +55,7 @@ class Forecast {
       const url = `${asafonov.settings.apiUrl}/?` + (this.place ? `place=${this.place}` : `lat=${this.lat}&lon=${this.lon}`)
 
       try {
-        const apiResp = await (await fetch(url)).json()
+        const apiResp = await asafonov.request.get(url, true)
         const date = apiResp[0].date.substr(0, 10)
         let maxToday = apiResp[0].temp
         let minToday = apiResp[0].temp
