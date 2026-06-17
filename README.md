@@ -3,7 +3,6 @@ Weather: Cool and Hot
 
 Another weather app
 
-
 Third-party fonts
 -----------------
 
