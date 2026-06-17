@@ -95,6 +95,12 @@ class ForecastView {
     this.container.querySelector('.city_name').innerHTML = place
     this.displayData(this.model.getCachedData())
     const data = await this.model.getData()
+
+    if (data.error) {
+      alert(data.error)
+      return
+    }
+
     this.displayData(data)
   }
 

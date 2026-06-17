@@ -56,6 +56,11 @@ class Forecast {
 
       try {
         const apiResp = await asafonov.request.get(url, true)
+
+        if (apiResp.error) {
+          return {error: apiResp.error}
+        }
+
         const date = apiResp[0].date.substr(0, 10)
         let maxToday = apiResp[0].temp
         let minToday = apiResp[0].temp
