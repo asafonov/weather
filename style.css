@@ -410,36 +410,36 @@ svg * {
   transform: rotate(45deg);
 }
 
-.navigation .search_section {
+#addOnMap .search_section {
   width: 100%;
 }
 
-.navigation .search_section .search_field,
-.navigation .search_section .search_result_list {
+#addOnMap .search_section .search_field,
+#addOnMap .search_section .search_result_list {
   width: 100%;
-  background-color: var(--color_secondary);
+
   border-radius: var(--size8);
-  color: var(--color_primary);
 }
 
-.navigation .search_field {
+#addOnMap .search_field {
   height: 100%;
   padding: 0 var(--size24) 0 var(--size12);
-
+  background-color: var(--color_primary);
+  z-index: 99;
 }
 
-.navigation .search_field .icon_backspace {
+#addOnMap .search_field .icon_backspace {
   visibility: hidden;
   position: absolute;
   right: var(--size8);
   cursor: pointer;
 }
 
-.navigation .search_field input:not([value=""]) ~ .icon_backspace {
+#addOnMap .search_field input:not([value=""]) ~ .icon_backspace {
   visibility: visible;
 }
 
-.navigation .search_field input {
+#addOnMap .search_field input {
   background-color: transparent;
   -webkit-appearance: none;
   -moz-appearance:    none;
@@ -447,16 +447,18 @@ svg * {
   width: 100%;
 }
 
-.navigation .search_field input:focus-visible {
+#addOnMap .search_field input:focus-visible {
   outline: none;
 }
 
-.navigation .search_result_list {
+#addOnMap .search_result_list {
   position: absolute;
-  z-index: 99;
-  top: 100%;
-  padding: var(--size12);
+  top: 0;
+  padding: var(--size24) var(--size12) var(--size12) var(--size12);
   gap: var(--size8);
+  background-color: rgba(34, 38, 38, 0.8);
+  overflow-y: scroll;
+  max-height: 40vh;
 }
 
 .popup_window {
@@ -471,6 +473,10 @@ svg * {
   display: none;
 }
 
+.popup_window#addOnMap {
+  display: flex;
+}
+
 .popup_window .popup_block {
   padding: var(--size12);
   gap: var(--size8);
@@ -478,6 +484,28 @@ svg * {
   background-color: var(--color_secondary);
   border-radius: var(--size8);
   color: var(--color_primary);
+}
+
+.popup_window#addOnMap .popup_block {
+  width: 85vw;
+  height: 85vh;
+  overflow: hidden;
+  justify-content: space-between;
+}
+
+.popup_window#addOnMap .popup_block #mapview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#mapview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale();
 }
 
 .popup_window .popup_block .list_item,
