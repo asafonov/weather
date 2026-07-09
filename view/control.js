@@ -11,7 +11,7 @@ class ControlView {
       }
     }
 
-    if (navigator.geolocation) {
+    if (asafonov.settings.geoEnabled && navigator.geolocation) {
       const timeout = setTimeout(() => {
         cities.length === 0 && this.forecastViews.push(new ForecastView(asafonov.settings.defaultCity, this.container))
         this.displayForecast()

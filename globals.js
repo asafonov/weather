@@ -13,7 +13,8 @@ window.asafonov.events = {
 }
 window.asafonov.settings = {
   apiUrl: 'https://isengard.su/api/v1/weather/',
-  defaultCity: 'Moscow'
+  defaultCity: 'Moscow',
+  geoEnabled: false
 }
 window.onerror = (msg, url, line) => {
   if (!! window.asafonov.debug) alert(`${msg} on line ${line}`)
