@@ -293,6 +293,14 @@ svg * {
   height: var(--size12);
   stroke-width: var(--size_border_iconThin);
 }
+.icon_clear_field {
+  width: var(--size12);
+  height: var(--size12);
+  stroke-width: var(--size_border_iconS);
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: rotate(45deg);
+}
 
 .icon_wrap {
   display: flex;
@@ -426,6 +434,18 @@ svg * {
   padding: 0 var(--size24) 0 var(--size12);
   background-color: var(--color_primary);
   z-index: 99;
+  overflow: hidden;
+}
+
+#addOnMap .search_field .icon_clear_field {
+  visibility: hidden;
+  position: absolute;
+  right: var(--size12);
+  cursor: pointer;
+}
+
+#addOnMap .search_field:not([value=""]) .icon_clear_field {
+  visibility: visible;
 }
 
 #addOnMap .search_field .icon_backspace {
