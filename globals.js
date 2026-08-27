@@ -16,6 +16,7 @@ window.asafonov.settings = {
   defaultCity: 'Moscow',
   geoEnabled: false
 }
+window.asafonov.userId = null
 window.onerror = (msg, url, line) => {
   if (!! window.asafonov.debug) alert(`${msg} on line ${line}`)
 }
