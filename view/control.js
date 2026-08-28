@@ -3,6 +3,10 @@ class ControlView {
     this.addEventListeners()
     this.container = document.querySelector('#forecast')
     this.forecastViews = []
+    this.initCities()
+  }
+
+  async initCities() {
     const cities = await window.asafonov.request.get(`${window.asafonov.settings.botUrl}?userId=${window.asafonov.userId}`, true) || []
 
     if (cities.length > 0) {
@@ -43,7 +47,6 @@ class ControlView {
       this.displayForecast()
       this.navigationView = new NavigationView(this.container, false)
     }
-
   }
 
   getCurrentCityIndex() {
