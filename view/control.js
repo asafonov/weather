@@ -1,5 +1,5 @@
 class ControlView {
-  async constructor() {
+  constructor() {
     this.addEventListeners()
     this.container = document.querySelector('#forecast')
     this.forecastViews = []
