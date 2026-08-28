@@ -10,6 +10,12 @@ class ControlView {
     const cities = await window.asafonov.request.get(`${window.asafonov.settings.botUrl}?user_id=${window.asafonov.userId}`, true) || []
 
     if (cities.length > 0) {
+      asafonov.cache.set('cities', cities)
+    } else {
+      asafonov.cache.remove('cities')
+    }
+
+    if (cities.length > 0) {
       for (let i = 0; i < cities.length; ++i) {
         this.forecastViews.push(new ForecastView(cities[i], this.container))
       }

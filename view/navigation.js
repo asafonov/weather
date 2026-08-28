@@ -4,7 +4,7 @@ class NavigationView {
     this.geoUsed = geoUsed
     const navigationContainer = container.querySelector('.navigation')
     this.addButton = navigationContainer.querySelector('.icon_add')
-    this.addButton.style.display = 'none'
+    this.addButton.style.visibility = 'hidden'
     this.listButton = navigationContainer.querySelector('.icon_list')
     this.pagesButtons = navigationContainer.querySelector('.pages')
     this.popupWindow = document.querySelector('.popup_window')
