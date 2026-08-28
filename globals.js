@@ -13,6 +13,7 @@ window.asafonov.events = {
 }
 window.asafonov.settings = {
   apiUrl: 'https://isengard.su/api/v1/weather/',
+  botUrl: 'https://isengard.asafonov.org/weather.bot/api.php',
   defaultCity: 'Moscow',
   geoEnabled: false
 }

@@ -1,9 +1,9 @@
 class ControlView {
-  constructor() {
+  async constructor() {
     this.addEventListeners()
     this.container = document.querySelector('#forecast')
     this.forecastViews = []
-    const cities = asafonov.cache.getItem('cities') || []
+    const cities = await window.asafonov.request.get(`${window.asafonov.settings.botUrl}?userId=${window.asafonov.userId}`, true) || []
 
     if (cities.length > 0) {
       for (let i = 0; i < cities.length; ++i) {
