@@ -12,7 +12,7 @@ window.asafonov.events = {
   USE_SYSTEM_UPDATED: 'USE_SYSTEM_UPDATED'
 }
 window.asafonov.settings = {
-  apiUrl: 'https://isengard.su/api/v1/weather/',
+  apiUrl: 'https://isengard.asafonov.org/weather.bot/api.php',
   botUrl: 'https://isengard.asafonov.org/weather.bot/api.php',
   defaultCity: 'Moscow',
   geoEnabled: false
